@@ -27,7 +27,18 @@
 ## 其他
 
 
-## 草稿
-1.
+# 草稿
+## 关于我
+- 身份：中国大一学生
+- 语言偏好：中文
+
+## 偏好
+- 回答用中文
+- 喜欢简洁直接的操作步骤
+
+## 其他
+- 使用 Windows PowerShell
+- 已搭建 GitHub 记忆库：https://raw.githubusercontent.com/DWAS888/claude-memory/main/memories.md
+- 新对话开始时发送记忆库链接让 Claude 读取
 ---
 *最后更新：2026-04-05*
