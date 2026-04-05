@@ -1,25 +1,25 @@
-# Claude Memory
+# Claude 记忆库
 
-> After each conversation, ask Claude to summarize. At the start of a new conversation, send this file's link to Claude.
-
----
-
-## About Me
-
-- Identity: Chinese student 
-- Language: Prefer Chinese
-
-## Preferences
-
-
-## Habits
-
-
-## Work / Study
-
-
-## Other
-
+> 每次对话结束让 Claude 总结写入，新对话开始时把此文件链接发给 Claude 读取。
 
 ---
-*Last updated: 2026-04-05*
+
+## 关于我
+身份：中国学生（记得躲一下Claude风控）
+语言偏好：中文
+
+
+## 偏好
+
+
+## 习惯
+
+
+## 工作与学习
+
+
+## 其他
+
+
+---
+*最后更新：2026-04-05*
