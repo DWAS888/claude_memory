@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head> 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude 记忆库</title>
@@ -12,9 +12,10 @@
   .subtitle { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
   .card { background: #fff; border-radius: 12px; border: 1px solid #e8e8e8; padding: 1.25rem; margin-bottom: 1rem; }
   label { font-size: 12px; color: #888; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
-  input, textarea { width: 100%; font-size: 15px; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa; color: #1a1a1a; font-family: inherit; outline: none; transition: border-color 0.15s; }
-  input:focus, textarea:focus { border-color: #999; background: #fff; }
-  textarea { resize: vertical; line-height: 1.6; min-height: 320px; font-size: 14px; font-family: "SF Mono", "Consolas", monospace; }
+  input, textarea, select { width: 100%; font-size: 15px; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa; color: #1a1a1a; font-family: inherit; outline: none; transition: border-color 0.15s; }
+  input:focus, textarea:focus, select:focus { border-color: #999; background: #fff; }
+  textarea { resize: vertical; line-height: 1.6; min-height: 280px; font-size: 14px; font-family: "SF Mono", "Consolas", monospace; }
+  select { height: 42px; cursor: pointer; }
   .field { margin-bottom: 1rem; }
   .field:last-child { margin-bottom: 0; }
   .row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -23,21 +24,28 @@
   button:active { opacity: 0.7; }
   .btn-primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
   .btn-primary:hover { background: #333; }
+  .btn-green { background: #2d7a3a; color: #fff; border-color: #2d7a3a; }
+  .btn-green:hover { background: #235f2c; }
   .status { font-size: 13px; margin-top: 10px; min-height: 18px; }
   .ok { color: #2d7a3a; }
   .err { color: #c0392b; }
   .section-label { font-size: 13px; font-weight: 500; color: #555; margin-bottom: 12px; }
   .tip { font-size: 12px; color: #aaa; margin-top: 8px; line-height: 1.5; }
   .divider { height: 1px; background: #f0f0f0; margin: 1rem 0; }
+  .add-row { display: flex; gap: 8px; align-items: flex-start; }
+  .add-row select { width: 140px; flex-shrink: 0; height: auto; padding: 10px 12px; }
+  .add-row textarea { min-height: 80px; flex: 1; }
   @media (prefers-color-scheme: dark) {
     body { background: #111; color: #eee; }
     .card { background: #1c1c1e; border-color: #2c2c2e; }
-    input, textarea { background: #2c2c2e; border-color: #3a3a3c; color: #eee; }
-    input:focus, textarea:focus { border-color: #666; background: #333; }
+    input, textarea, select { background: #2c2c2e; border-color: #3a3a3c; color: #eee; }
+    input:focus, textarea:focus, select:focus { border-color: #666; background: #333; }
     button { background: #2c2c2e; border-color: #3a3a3c; color: #eee; }
     button:hover { background: #3a3a3c; }
     .btn-primary { background: #eee; color: #111; border-color: #eee; }
     .btn-primary:hover { background: #ccc; }
+    .btn-green { background: #2d7a3a; color: #fff; border-color: #2d7a3a; }
+    .btn-green:hover { background: #3a9e4a; }
     .divider { background: #2c2c2e; }
     .ok { color: #5cba6a; }
     .err { color: #e06c6c; }
@@ -47,8 +55,8 @@
 <body>
 <div class="container">
   <h1>📓 Claude 记忆库</h1>
-  <p class="subtitle">读取、编辑、保存你的记忆文件，或复制给 Claude</p>
-
+  <p class="subtitle">读取、添加、保存你的记忆文件，或复制给 Claude</p>
+ 
   <div class="card">
     <div class="section-label">GitHub 配置</div>
     <div class="field">
@@ -63,10 +71,31 @@
       <label>Personal Access Token</label>
       <input id="token" type="password" placeholder="ghp_..." autocomplete="off">
     </div>
-    <p class="tip">Token 仅在本地使用，不经过任何服务器。建议生成一个只有 repo 权限的专用 token。</p>
+    <p class="tip">Token 仅在本地浏览器使用，不经过任何服务器。</p>
   </div>
-
+ 
   <div class="card">
+    <div class="section-label">添加新记忆</div>
+    <div class="add-row">
+      <select id="category">
+        <option value="关于我">关于我</option>
+        <option value="偏好">偏好</option>
+        <option value="习惯">习惯</option>
+        <option value="工作与学习">工作与学习</option>
+        <option value="情感">情感</option>
+        <option value="娱乐">娱乐</option>
+        <option value="其他">其他</option>
+      </select>
+      <textarea id="new-entry" placeholder="输入新记忆条目...&#10;支持多行，每行自动加 - 前缀"></textarea>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+      <button class="btn-green" onclick="addEntry()">添加到记忆库并保存 ↑</button>
+    </div>
+    <div class="status" id="add-status"></div>
+  </div>
+ 
+  <div class="card">
+    <div class="section-label">记忆库全文</div>
     <div class="row" style="margin-bottom: 12px;">
       <button class="btn-primary" onclick="loadMemory()">读取记忆库</button>
       <button onclick="saveMemory()">保存到 GitHub ↑</button>
@@ -74,15 +103,15 @@
     </div>
     <div class="status" id="status"></div>
     <div class="divider"></div>
-    <textarea id="content" placeholder="点击「读取记忆库」加载内容，也可以直接在这里编辑后保存..."></textarea>
+    <textarea id="content" placeholder="点击「读取记忆库」加载内容..."></textarea>
   </div>
-
+ 
   <p class="tip" style="text-align:center;">新对话开始时点「复制给 Claude」，粘贴到对话开头即可</p>
 </div>
-
+ 
 <script>
 const STORAGE_KEY = 'claude_memory_config';
-
+ 
 window.onload = () => {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
@@ -91,7 +120,7 @@ window.onload = () => {
     if (saved.token) document.getElementById('token').value = saved.token;
   } catch(e) {}
 };
-
+ 
 function saveConfig() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -101,13 +130,13 @@ function saveConfig() {
     }));
   } catch(e) {}
 }
-
-function setStatus(msg, type) {
-  const el = document.getElementById('status');
+ 
+function setStatus(msg, type, id = 'status') {
+  const el = document.getElementById(id);
   el.textContent = msg;
   el.className = 'status ' + (type || '');
 }
-
+ 
 function getInfo() {
   const user = document.getElementById('user').value.trim();
   const repo = document.getElementById('repo').value.trim();
@@ -116,34 +145,37 @@ function getInfo() {
   saveConfig();
   return { user, repo, token };
 }
-
-async function loadMemory() {
+ 
+async function loadMemory(silent = false) {
   const info = getInfo();
-  if (!info) return;
-  setStatus('读取中...');
+  if (!info) return null;
+  if (!silent) setStatus('读取中...');
   try {
     const res = await fetch(`https://api.github.com/repos/${info.user}/${info.repo}/contents/memories.md`, {
       headers: { Authorization: `token ${info.token}`, Accept: 'application/vnd.github.v3+json' }
     });
     if (!res.ok) throw new Error(`读取失败（${res.status}），检查 token 和仓库名`);
     const data = await res.json();
-    document.getElementById('content').value = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+    const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+    document.getElementById('content').value = content;
     window._sha = data.sha;
-    setStatus('读取成功！', 'ok');
+    if (!silent) setStatus('读取成功！', 'ok');
+    return content;
   } catch(e) {
-    setStatus(e.message, 'err');
+    if (!silent) setStatus(e.message, 'err');
+    return null;
   }
 }
-
-async function saveMemory() {
+ 
+async function saveMemory(content, silent = false) {
   const info = getInfo();
-  if (!info) return;
-  const content = document.getElementById('content').value;
-  if (!content.trim()) { setStatus('内容为空', 'err'); return; }
-  if (!window._sha) { setStatus('请先点「读取记忆库」', 'err'); return; }
-  setStatus('保存中...');
+  if (!info) return false;
+  const text = content !== undefined ? content : document.getElementById('content').value;
+  if (!text.trim()) { setStatus('内容为空', 'err'); return false; }
+  if (!window._sha) { setStatus('请先点「读取记忆库」', 'err'); return false; }
+  if (!silent) setStatus('保存中...');
   try {
-    const encoded = btoa(unescape(encodeURIComponent(content)));
+    const encoded = btoa(unescape(encodeURIComponent(text)));
     const res = await fetch(`https://api.github.com/repos/${info.user}/${info.repo}/contents/memories.md`, {
       method: 'PUT',
       headers: { Authorization: `token ${info.token}`, 'Content-Type': 'application/json' },
@@ -152,12 +184,57 @@ async function saveMemory() {
     if (!res.ok) throw new Error('保存失败，请重试');
     const data = await res.json();
     window._sha = data.content.sha;
-    setStatus('保存成功！', 'ok');
+    if (!silent) setStatus('保存成功！', 'ok');
+    return true;
   } catch(e) {
-    setStatus(e.message, 'err');
+    if (!silent) setStatus(e.message, 'err');
+    return false;
   }
 }
-
+ 
+async function addEntry() {
+  const category = document.getElementById('category').value;
+  const newText = document.getElementById('new-entry').value.trim();
+  if (!newText) { setStatus('请输入记忆内容', 'err', 'add-status'); return; }
+ 
+  setStatus('读取中...', '', 'add-status');
+  let content = await loadMemory(true);
+  if (content === null) { setStatus('读取失败，请检查配置', 'err', 'add-status'); return; }
+ 
+  const lines = newText.split('\n').filter(l => l.trim());
+  const newLines = lines.map(l => l.trim().startsWith('-') ? l.trim() : `- ${l.trim()}`).join('\n');
+ 
+  const heading = `## ${category}`;
+  const idx = content.indexOf(heading);
+ 
+  if (idx !== -1) {
+    const afterHeading = content.indexOf('\n', idx) + 1;
+    const rest = content.slice(afterHeading);
+    const nextHeadingMatch = rest.search(/^##\s/m);
+    const insertPos = nextHeadingMatch === -1 ? content.length : afterHeading + nextHeadingMatch;
+    const before = content.slice(0, insertPos).trimEnd();
+    const after = content.slice(insertPos);
+    content = `${before}\n${newLines}\n${after.startsWith('\n') ? after : '\n' + after}`;
+  } else {
+    content = content.trimEnd() + `\n\n${heading}\n${newLines}\n`;
+  }
+ 
+  const today = new Date().toISOString().slice(0, 10);
+  content = content.replace(/\*最后更新：.*?\*/, `*最后更新：${today}*`);
+  if (!content.includes('最后更新')) content = content.trimEnd() + `\n\n---\n\n*最后更新：${today}*\n`;
+ 
+  document.getElementById('content').value = content;
+ 
+  setStatus('保存中...', '', 'add-status');
+  const ok = await saveMemory(content, true);
+  if (ok) {
+    setStatus(`已添加到「${category}」并保存！`, 'ok', 'add-status');
+    document.getElementById('new-entry').value = '';
+  } else {
+    setStatus('保存失败，请重试', 'err', 'add-status');
+  }
+}
+ 
 function copyPrompt() {
   const content = document.getElementById('content').value;
   if (!content.trim()) { setStatus('请先读取记忆库', 'err'); return; }
