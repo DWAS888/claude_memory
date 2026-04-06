@@ -16,7 +16,7 @@
 
 
 ## 工作与学习
-
+- Chrome 登录 Claude 循环跳转 → 清除 claude.ai 和 anthropic 的 Cookie 即可解决
 
 ## 情感
 
@@ -41,4 +41,4 @@
 - 已搭建 GitHub 记忆库：https://raw.githubusercontent.com/DWAS888/claude-memory/main/memories.md
 - 新对话开始时发送记忆库链接让 Claude 读取
 ---
-*最后更新：2026-04-05*
+*最后更新：2026-04-06*
