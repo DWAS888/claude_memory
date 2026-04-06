@@ -20,6 +20,8 @@
 ## 习惯
 - 普通感冒初期（鼻塞、嗓子不适），吃了快克，注意休息。
 - 减肥不用太焦虑，偶尔吃多了自然会回调，保持节奏比纠结每一餐更重要。
+- 使用 Windows PowerShell
+- 喜欢用截图来沟通问题
 
 ## 工作与学习
 - Chrome 登录 Claude 循环跳转 → 清除 claude.ai 和 anthropic 的 Cookie 即可解决
