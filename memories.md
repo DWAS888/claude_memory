@@ -86,6 +86,10 @@
 
 
 # 草稿
+- 已搭建 GitHub 记忆库工具：https://DWAS888.github.io/claude_memory/
+- 记忆库仓库：DWAS888/claude_memory
+- 对技术有兴趣，愿意折腾，但需要一步步引导
+
 ## 关于我
 - 身份：中国大一学生
 - 语言偏好：中文
