@@ -13,7 +13,7 @@
 
 
 ## 习惯
-
+- 普通感冒初期（鼻塞、嗓子不适），吃了快克，注意休息。
 
 ## 工作与学习
 - Chrome 登录 Claude 循环跳转 → 清除 claude.ai 和 anthropic 的 Cookie 即可解决
